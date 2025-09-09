@@ -2,8 +2,7 @@
 
 ## 1. ⚙ Configuration
 
-Most scripts have a **settings block** at the top.  
-Example from `backup-script.sh`:
+The **settings block** at the top of `backup-script.sh`:
 
 ```bash
 # ======== SETTINGS ========
