@@ -6,16 +6,19 @@ Most scripts have a **settings block** at the top.
 Example from `backup-script.sh`:
 
 ```bash
-# ======== SETTINGS
-IS_COLOR=true  # true = colored output, false = plain text
+# ======== SETTINGS ========
+
 SOURCE_DIRS=(
-"/path/to/folder1"
-"/path/to/folder2"
-)
-BACKUP_DIR="/path/to/backup"
-MAX_BACKUPS_TO_KEEP=20
-OFFSET="  "
-# ======== END SETTINGS
+    "/path/to/folder1"
+    "/path/to/folder2"
+) # Folders to back up
+
+BACKUP_DIR="/path/to/backup" # Folder to store backups
+MAX_BACKUPS_TO_KEEP=20 # Maximum number of backups to keep per folder
+OFFSET="  " # Indentation for output
+IS_COLOR=true  # true = colored output, false = plain text
+
+# ======== END SETTINGS ========
 ```
 
 ---
@@ -26,7 +29,7 @@ Enable colors: `IS_COLOR=true`
 
 Disable colors: `IS_COLOR=false`
 
-Colors are ANSI escape sequences and will display in terminal or with `less -R` for logs.
+Colors are ANSI escape sequences and will display in terminal or with `less -R backup.log`, `tail backup.log` or `cat backup.log` for logs.
 
 ---
 
@@ -45,7 +48,7 @@ Colors are ANSI escape sequences and will display in terminal or with `less -R` 
 
 ## 3. 📅 Cron Job Example
 
-To run the backup script every day at 02:00:
+To run the backup script every day at 02:00, open the crontab for editing with the command `crontab -e` and add the following line:
 
 ```bash
 0 2 * * * /path/to/backup-script.sh >> /path/to/backup.log 2>&1
