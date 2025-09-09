@@ -40,5 +40,4 @@ chmod +x *.sh
 
 ## Index
 
-1. [backup-script.sh](docs/backup-script.md) - Backup multiple folders 
-1.1. [backup-script.uk.sh](docs/backup-script.uk.md) - Backup multiple folders (Ukrainian version 🇺🇦)
+1. [backup-script.sh](docs/backup-script.md) - Backup multiple folders ([Ukrainian version 🇺🇦](docs/backup-script.uk.md))
