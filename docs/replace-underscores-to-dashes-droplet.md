@@ -48,8 +48,11 @@ echo "=== Droplet finished ===" >> "$LOGFILE"
 1. Open **Automator**.  
 ![](../img/automator-icon.jpg)
 2. Select **New Document** → **Application**.  
-3. Add the action **Run Shell Script**.  
-4. In the top right of the action, set **Pass input:** to **as arguments**.  
+![](../img/automator_application_create.jpg)
+3. Add the action **Run Shell Script**. (Find *shell* and double-click on result)
+![](../img/automator_shell_script.jpg)
+4. Change default shell in top left corner. In the top right of the action, set **Pass input:** to **as arguments**.  
+![](../img/automator_shell.jpg)
 5. Paste the script above into the action.  
 6. Save the application (e.g., `ReplaceUnderscoreWithDash.app`) in a convenient location (e.g., `~/Applications` or Desktop).  
 
