@@ -6,6 +6,7 @@ These scripts are designed for Linux/macOS environments and help automate routin
 ---
 
 ## 📌 Features
+
 - 📂 **Backup automation** — create and rotate backups for multiple folders
 - 🖥 **System maintenance** — clean old files, monitor changes
 - ⚙ **Configurable** — easy to adjust settings via variables
@@ -15,10 +16,13 @@ These scripts are designed for Linux/macOS environments and help automate routin
 ---
 
 ## 📂 Repository Structure
-<pre>├── README.md # This file 
+
+```text
+├── README.md # This file 
 ├┬─ scripts/ 
 │└── *.sh # Some automation scripts
-└── docs/ # Documentation and notes</pre>
+└── docs/ # Documentation and notes
+```
 
 ---
 
@@ -42,3 +46,4 @@ chmod +x *.sh
 
 1. [backup-script.sh](docs/backup-script.md) - Backup multiple folders ([Ukrainian version 🇺🇦](docs/backup-script.uk.md))
 2. [macOS Automator Droplet — Replace `_` with `-` in filenames](docs/replace-underscores-to-dashes-droplet.md) ([Ukrainian version 🇺🇦](docs/replace-underscores-to-dashes-droplet.uk.md))
+3. [occscan.sh](docs/occscan.md) - Script runs the Nextcloud `occ files:scan` command for a specific user and path
