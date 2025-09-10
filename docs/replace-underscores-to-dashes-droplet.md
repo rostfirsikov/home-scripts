@@ -46,7 +46,7 @@ echo "=== Droplet finished ===" >> "$LOGFILE"
 ## 🛠 How to create the Droplet
 
 1. Open **Automator**.  
-<img src="../img/automator-icon.jpg" alt="Automator Icon" width="50%" height="50%">
+![](../img/automator-icon.jpg)
 2. Select **New Document** → **Application**.  
 3. Add the action **Run Shell Script**.  
 4. In the top right of the action, set **Pass input:** to **as arguments**.  
