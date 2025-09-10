@@ -41,3 +41,4 @@ chmod +x *.sh
 ## Index
 
 1. [backup-script.sh](docs/backup-script.md) - Backup multiple folders ([Ukrainian version 🇺🇦](docs/backup-script.uk.md))
+2. [macOS Automator Droplet — Replace `_` with `-` in filenames](docs/replace-underscores-to-dashes-droplet.md)
