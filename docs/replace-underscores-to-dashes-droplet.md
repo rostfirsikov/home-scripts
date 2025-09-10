@@ -86,11 +86,3 @@ Renamed to: file-name-with-underscores.jpg
 - Works only with files, not folders (can be extended to handle folders recursively if needed).  
 - If files are in protected locations, you may need to grant the Droplet **Full Disk Access** in  
 `System Settings → Privacy & Security → Full Disk Access`.
-
----
-
-## 📜 License
-
-This script is released into the public domain under
-
-The Unlicense
