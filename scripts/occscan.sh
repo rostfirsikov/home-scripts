@@ -17,6 +17,7 @@
 #   - Nextcloud OCC CLI tool
 #   - sendmail (or compatible MTA)
 #   - sudo access for the web server user (e.g., www-data)
+#   - curl (for ntfy notifications)
 #
 # Usage:
 #   ./occscan.sh [<relative_path_inside_user_files>]
@@ -30,12 +31,12 @@
 #
 # Author: Rostyslav Firsikov <https://github.com/rostfirsikov/>
 # License: Unlicense - free distribution and modification
-# Version: 0.5.0 (2025-09-22) — added colored output via IS_COLOR
+# Version: 0.6.1 (2025-10-09) — added ntfy notification support
 
 # ======== SETTINGS ========
 
 # Path to your Nextcloud installation
-PATH_TO_NEXTCLOUD="/barracuda/www/nc" 
+PATH_TO_NEXTCLOUD="/path/to/nc" 
 
 # Nextcloud username whose files will be scanned
 NC_USERNAME="username_here" 
@@ -51,13 +52,33 @@ MAX_LOG_SIZE=524288
 #
 # email_level_reporting="All"      # Always send a report
 # email_level_reporting="Error"    # Send only if Errors > 0
-# email_level_reporting="Changes"  # Send if New/Updated/Removed/Errors >
+# email_level_reporting="Changes"  # Send if New/Updated/Removed/Errors > 0
 email_level_reporting="None"     # Never send a report
 
 # Email settings
 EMAIL_FROM="noreply@example.com" # Sender email address
 EMAIL_TO="admin@example.com" # Recipient email address
 EMAIL_SUBJECT="Nextcloud OCC Scan Report - $(date '+%Y-%m-%d %H:%M:%S')" # Email subject
+
+# Enable or disable ntfy notifications (true/false)
+NTFY_ENABLED=true
+
+# Ntfy notification level: All, Error, Changes, None
+# (Same logic as email_level_reporting)
+ntfy_level_reporting="All"
+
+# Ntfy server URL (your ntfy server)
+# Note: Trailing slash will be handled automatically
+NTFY_URL="https://ntfy.my.home.server.com/"
+
+# Ntfy channel (topic) to send notifications to
+NTFY_CHANNEL="server"
+
+# Ntfy authentication (username:password format)
+NTFY_AUTH="username:password"
+
+# Ntfy tags (comma-separated, used for icons in notifications)
+NTFY_TAGS="occscan"
 
 # ======== END SETTINGS ========
 
@@ -179,6 +200,72 @@ if $send_email; then
     echo "</body>"
     echo ""
   } | sendmail -t
+fi
+
+# ======== NTFY NOTIFICATION ========
+
+# Determine if a ntfy notification should be sent
+send_ntfy=false
+
+if [ "$NTFY_ENABLED" = true ]; then
+  case "$ntfy_level_reporting" in
+    All)
+      send_ntfy=true
+      ;;
+    Error)
+      [ "$errors" -gt 0 ] && send_ntfy=true
+      ;;
+    Changes)
+      if [ "$new" -gt 0 ] || [ "$updated" -gt 0 ] || [ "$removed" -gt 0 ] || [ "$errors" -gt 0 ]; then
+        send_ntfy=true
+      fi
+      ;;
+    None)
+      send_ntfy=false
+      ;;
+  esac
+fi
+
+# Send ntfy notification if needed
+if $send_ntfy; then
+  # Remove trailing slash from NTFY_URL if present
+  NTFY_URL_CLEAN="${NTFY_URL%/}"
+  
+  # Set priority based on status
+  if [ "$status" = "ERROR" ] || [ "$errors" -gt 0 ]; then
+    priority="urgent"
+    ntfy_icon="⚠️"
+  else
+    priority="default"
+    ntfy_icon="✅"
+  fi
+
+  # Build notification title
+  ntfy_title="$ntfy_icon Nextcloud OCC Scan: $status"
+
+  # Build notification message
+  ntfy_message="Path: ${1:-root}
+  Status: $status
+  ────────────────
+  📁 Folders: $folders
+  📄 Files: $files
+  ✨ New: $new
+  🔄 Updated: $updated
+  🗑️ Removed: $removed
+  ❌ Errors: $errors
+  ────────────────
+  Time: $(date '+%Y-%m-%d %H:%M:%S')"
+
+  # Send notification via curl
+  curl -s -o /dev/null \
+    -u "$NTFY_AUTH" \
+    -H "Title: $ntfy_title" \
+    -H "Priority: $priority" \
+    -H "Tags: $NTFY_TAGS" \
+    -d "$ntfy_message" \
+    "$NTFY_URL_CLEAN/$NTFY_CHANNEL"
+  
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] Ntfy notification sent" >> "$LOG_FILE"
 fi
 
 rm -f "$TMP_RESULT"
